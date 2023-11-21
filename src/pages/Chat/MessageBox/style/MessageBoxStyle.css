@@ -1,0 +1,9 @@
+.message-box {
+  background: #D9D9D9;
+  width: 50%;
+  margin-bottom: 1rem;
+}
+.message-box p {
+  margin: 0;
+  padding: 1rem;
+}/*# sourceMappingURL=MessageBoxStyle.css.map */

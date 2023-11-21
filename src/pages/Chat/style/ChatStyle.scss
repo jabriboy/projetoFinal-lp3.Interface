@@ -1,0 +1,54 @@
+.chat{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    h2{
+        text-align: center;
+    }
+    .chat-box{
+        display: flex;
+        .contatos-nav{
+            background: #3CC9D2;
+            padding: 1rem;
+            position: relative;
+
+            .addContatoBtn{
+                a{
+                    color: white;
+                    text-decoration: none;
+                }
+                width: fit-content;
+                padding: 0 .28rem;
+                border-radius: 1.15625rem;
+                background: #0F575C;
+
+                position: absolute;
+                bottom: 0;
+                right: 0;
+
+                margin: 1rem;
+            }
+        }
+        .chat-messages{
+            padding: 1rem;
+            background: #0F575C;
+            .background-messages{
+                margin: 1rem;
+                padding: 1rem;
+                background: rgba(217, 217, 217, 0.25);
+            }
+            .message-bar{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                textarea{
+                    resize: none;
+                }
+                button{
+                    background: none;
+                    border: none;
+                }
+            }
+        }
+    }
+}

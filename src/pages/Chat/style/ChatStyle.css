@@ -1,0 +1,52 @@
+.chat {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.chat h2 {
+  text-align: center;
+}
+.chat .chat-box {
+  display: flex;
+}
+.chat .chat-box .contatos-nav {
+  background: #3CC9D2;
+  padding: 1rem;
+  position: relative;
+}
+.chat .chat-box .contatos-nav .addContatoBtn {
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 0 0.28rem;
+  border-radius: 1.15625rem;
+  background: #0F575C;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 1rem;
+}
+.chat .chat-box .contatos-nav .addContatoBtn a {
+  color: white;
+  text-decoration: none;
+}
+.chat .chat-box .chat-messages {
+  padding: 1rem;
+  background: #0F575C;
+}
+.chat .chat-box .chat-messages .background-messages {
+  margin: 1rem;
+  padding: 1rem;
+  background: rgba(217, 217, 217, 0.25);
+}
+.chat .chat-box .chat-messages .message-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chat .chat-box .chat-messages .message-bar textarea {
+  resize: none;
+}
+.chat .chat-box .chat-messages .message-bar button {
+  background: none;
+  border: none;
+}/*# sourceMappingURL=ChatStyle.css.map */

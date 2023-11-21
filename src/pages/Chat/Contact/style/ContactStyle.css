@@ -1,0 +1,23 @@
+.contact {
+  display: flex;
+  background: #D9D9D9;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 2rem;
+  padding: 0 1rem;
+  margin: 1rem;
+}
+.contact .username {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.contact .username hr {
+  border-width: 0.01rem;
+  height: 50%;
+  border-style: solid;
+  margin: 0 1rem;
+}
+.contact .last-message {
+  text-align: end;
+}/*# sourceMappingURL=ContactStyle.css.map */

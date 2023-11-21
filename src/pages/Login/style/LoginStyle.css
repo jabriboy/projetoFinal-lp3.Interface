@@ -1,0 +1,27 @@
+.login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form h2 {
+  color: white;
+  text-align: center;
+  margin-top: 0;
+  text-transform: capitalize;
+}
+form .div-form {
+  background: #0F575C;
+  padding: 2rem;
+}
+form .div-form label {
+  color: white;
+}
+form .div-form p {
+  color: red;
+}
+form .div-btn {
+  display: flex;
+  justify-content: center;
+}/*# sourceMappingURL=LoginStyle.css.map */
