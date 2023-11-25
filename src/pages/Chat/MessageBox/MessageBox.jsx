@@ -1,10 +1,10 @@
 import './style/MessageBoxStyle.css'
 
-function MessageBox(){
+function MessageBox(props){
     return(
         <>
         <div className="message-box">
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id est quidem voluptatibus? Sit voluptatibus earum mollitia maiores saepe sequi nam?</p>
+            <p>{props.message}</p>
         </div>
         </>
     )

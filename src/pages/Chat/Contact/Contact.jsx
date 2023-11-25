@@ -1,11 +1,11 @@
 import './style/ContactStyle.css'
 
-function Contact(){
+function Contact(props){
     return(
         <>
         <div className="contact">
             <div className="username">
-                <p>username</p>
+                <p>{props.chatId}</p>
             </div>
         </div>
         </>

@@ -1,13 +1,19 @@
 import {useForm} from "react-hook-form"
 import {yupResolver} from "@hookform/resolvers/yup"
 import * as yup from "yup"
-
+import {useNavigate} from "react-router-dom"
 import MessageBox from "./MessageBox/MessageBox";
 import Contact from "./Contact/Contact";
 import "./style/ChatStyle.css"
 import { Link } from "react-router-dom";
 
+import {useDispatch, useSelector} from "react-redux"
+
+import axios from 'axios'
+import React, { useRef, useEffect, useState } from "react";
+
 function Chat(){
+    const navigate = useNavigate();
     const schema = yup.object().shape({
         message: yup.string().min(1).required()
     })
@@ -16,8 +22,34 @@ function Chat(){
         resolver: yupResolver(schema)
     });
 
-    const onSubmit = (data) => {
-        console.log(data)
+    const [messages, setMessages] = useState([]);
+    const [contacts, setContacts] = useState([]);
+    const [updateMessages, setUpdateMessages] = useState(true);
+    const userId = useSelector((state) => state.user.value);
+
+    const scrollViewRef = useRef(null);
+
+    useEffect(() => {
+        scrollViewRef.current.scrollTop = scrollViewRef.current.scrollHeight;
+    }, [messages]);
+    
+    // get messages for the chosen contact
+    useEffect(() => {
+        axios.get(`http://localhost:5127/getAllInChat/${0}`).then((res) => {
+            setMessages(res.data)
+        })
+    }, [updateMessages])
+
+    // get the contacts for the set user
+    useEffect(() => {
+        axios.get(`http://localhost:5127/chat/getByUserId?userId=${userId.id}`).then((res) => {
+            setContacts(res.data)
+        })
+    }, [])
+
+    const onSubmit = async (data) => {
+        await axios.post(`http://localhost:5127/message?idChat=${0}&idUser=${0}&message1=${data.message}`);
+        setUpdateMessages(!updateMessages)
     }
 
     const handleKeyDown = (e) => {
@@ -27,6 +59,7 @@ function Chat(){
         else if (e.key === 'Enter'){
             e.preventDefault();
             handleSubmit(onSubmit)();
+            e.target.value = ''
         }
     };
 
@@ -38,20 +71,28 @@ function Chat(){
                         <div className="contatos-nav">
                             <h2>user</h2>
                             <hr />
-                            <Contact/>
-                            <Contact/>
-                            <Contact/>
+                            <div className="contatos-bar" style={{ overflowY: 'auto', height: '200px' }}>
+                                {contacts.map(contact => {
+                                    return (
+                                        <Contact key={contact.id} chatId={contact.id} user1Id={contact.idUser1} user2Id={contact.idUser2}/>
+                                    )
+                                })}
+                            </div>
                             <div className="addContatoBtn"><Link to={"/add"}>+</Link></div>
                         </div>
                         <div className="chat-messages">
                             <h2>user 2</h2>
                             <hr />
-                            <div className="background-messages">
-                                <MessageBox/>
+                            <div className="background-messages" style={{ overflowY: 'auto', height: '200px' }} ref={scrollViewRef}>
+                                {messages.map(message => {
+                                    return(
+                                        <MessageBox key={message.id} message={message.message1}/>
+                                    )
+                                })}
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className="message-bar">
-                                    <textarea rows={3} cols={50} type="text" name="message" id="message" placeholder="type here..." onKeyDown={handleKeyDown} {...register("message")}/>
+                                    <textarea rows={3} cols={50} id="message" placeholder="type here..." onKeyDown={handleKeyDown} {...register("message")}/>
                                     <div className="sendMessageBtn">
                                         <button type="submit">
                                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">

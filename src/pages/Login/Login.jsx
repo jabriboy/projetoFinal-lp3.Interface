@@ -1,10 +1,27 @@
 import {useForm} from "react-hook-form"
 import {yupResolver} from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import axios from 'axios'
+import {useNavigate} from "react-router-dom"
+import {loginUser} from "../../store"
+import {useDispatch} from 'react-redux'
 
 import "./style/LoginStyle.css"
+import { useEffect, useState } from "react"
 
 function Login(){
+    const navigate = useNavigate();
+
+    const [users, setUsers] = useState([]);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        axios.get("http://localhost:5127/user").then((res) => {
+            setUsers(res.data)
+        })
+    }, [])
+
     const schema = yup.object().shape({
         username: yup.string().min(3).required("username is required"),
         password: yup.string().min(4).max(16).required("password is required")
@@ -14,8 +31,18 @@ function Login(){
         resolver: yupResolver(schema)
     });
 
-    const onSubmit = (data) => {
-        console.log(data)
+    const onSubmit = async (data) => {
+        users.map(u => {
+            if(u.username == data["username"]){
+                if(u.password == data["password"]){
+                    dispatch(loginUser({
+                        id: u.id
+                    }))
+                    navigate('/chat');
+                }
+                return;
+            }
+        });
     }
 
     return(
