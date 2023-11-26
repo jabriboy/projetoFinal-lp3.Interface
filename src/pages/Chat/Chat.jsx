@@ -13,7 +13,7 @@ import axios from 'axios'
 import React, { useRef, useEffect, useState } from "react";
 
 function Chat(){
-    const navigate = useNavigate();
+    
     const schema = yup.object().shape({
         message: yup.string().min(1).required()
     })
@@ -25,30 +25,39 @@ function Chat(){
     const [messages, setMessages] = useState([]);
     const [contacts, setContacts] = useState([]);
     const [updateMessages, setUpdateMessages] = useState(true);
-    const userId = useSelector((state) => state.user.value);
+
+    const user = useSelector((state) => state.user.value);
+    const contact = useSelector((state) => state.contact.value);
+    const chat = useSelector((state) => state.chat.value);
 
     const scrollViewRef = useRef(null);
 
     useEffect(() => {
         scrollViewRef.current.scrollTop = scrollViewRef.current.scrollHeight;
-    }, [messages]);
+    }, [updateMessages, messages]);
     
     // get messages for the chosen contact
     useEffect(() => {
-        axios.get(`http://localhost:5127/getAllInChat/${0}`).then((res) => {
-            setMessages(res.data)
-        })
-    }, [updateMessages])
+        // id do chat
+        console.log(chat.id)
+        if(chat.id != ""){
+            axios.get(`http://localhost:5127/getAllInChat/${chat.id}`).then((res) => {
+                setMessages(res.data)
+            })
+        }
+    }, [chat.id, updateMessages, contact])
 
     // get the contacts for the set user
     useEffect(() => {
-        axios.get(`http://localhost:5127/chat/getByUserId?userId=${userId.id}`).then((res) => {
+        axios.get(`http://localhost:5127/chat/getByUserId?userId=${user.id}`).then((res) => {
             setContacts(res.data)
         })
     }, [])
 
     const onSubmit = async (data) => {
-        await axios.post(`http://localhost:5127/message?idChat=${0}&idUser=${0}&message1=${data.message}`);
+        if(chat.id != ""){
+            await axios.post(`http://localhost:5127/message?idChat=${chat.id}&idUser=${user.id}&message1=${data.message}`);
+        }
         setUpdateMessages(!updateMessages)
     }
 
@@ -69,7 +78,7 @@ function Chat(){
                 <div className="container">
                     <div className="chat-box">
                         <div className="contatos-nav">
-                            <h2>user</h2>
+                            <h2>{user.username}</h2>
                             <hr />
                             <div className="contatos-bar" style={{ overflowY: 'auto', height: '200px' }}>
                                 {contacts.map(contact => {
@@ -81,12 +90,12 @@ function Chat(){
                             <div className="addContatoBtn"><Link to={"/add"}>+</Link></div>
                         </div>
                         <div className="chat-messages">
-                            <h2>user 2</h2>
+                            <h2>{contact.username}</h2>
                             <hr />
                             <div className="background-messages" style={{ overflowY: 'auto', height: '200px' }} ref={scrollViewRef}>
                                 {messages.map(message => {
                                     return(
-                                        <MessageBox key={message.id} message={message.message1}/>
+                                        <MessageBox key={message.id} idUser={message.idUser} message={message.message1}/>
                                     )
                                 })}
                             </div>

@@ -1,10 +1,17 @@
 import {useForm} from "react-hook-form"
 import {yupResolver} from "@hookform/resolvers/yup"
 import * as yup from "yup"
-
+import {useDispatch, useSelector} from "react-redux"
+import axios from 'axios'
 import "./style/AddStyle.css"
+import { useNavigate } from "react-router-dom"
 
 function Add(){
+    const navigate = useNavigate();
+    const user = useSelector((state) => state.user.value);
+    const contact = useSelector((state) => state.contact.value);
+    const chat = useSelector((state) => state.chat.value);
+
     const schema = yup.object().shape({
         username: yup.string().min(3).required("username is required")
     })
@@ -13,8 +20,22 @@ function Add(){
         resolver: yupResolver(schema)
     });
 
-    const onSubmit = (data) => {
-        console.log(data)
+    const onSubmit = async (data) => {
+        var idUser2 = 0;
+        var chats = [];
+        await axios.get(`http://localhost:5127/username/${data.username}`).then((res) => {
+            idUser2 = res.data.id
+        })
+        await axios.get("http://localhost:5127/chat").then((res) => {
+            chats = res.data
+        })
+        var size = chats.length
+        var lastId = chats[size-1].id + 1;
+        await axios.post(`http://localhost:5127/chat?id=${lastId}&idUser1=${user.id}&idUser2=${idUser2}`).then((res) => {
+            if(res.data){
+                navigate('/chat')
+            }
+        });
     }
 
     return(
